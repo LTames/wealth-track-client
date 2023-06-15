@@ -53,6 +53,7 @@
       </span>
 
       <p-button [disabled]="!registerForm.valid || registerFormLoading" type="submit" label="Cadastre-se" styleClass="w-full mb-4"></p-button>
+      <p-messages styleClass="messages" [closable]="false"></p-messages>
       <span class="font-medium text-600">Já possui uma conta? <a [routerLink]="['/auth/login']" class="font-semibold cursor-pointer text-900 hover:text-primary transition-colors transition-duration-300">Login</a></span>
     </form>
   </div>

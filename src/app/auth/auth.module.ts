@@ -9,6 +9,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
 import { RouterModule } from '@angular/router';
+import { MessagesModule } from 'primeng/messages';
 
 @NgModule({
   declarations: [LoginComponent, RegisterComponent],
@@ -20,6 +21,7 @@ import { RouterModule } from '@angular/router';
     CheckboxModule,
     ReactiveFormsModule,
     RouterModule,
+    MessagesModule,
   ],
 })
 export class AuthModule {}
