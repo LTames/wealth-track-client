@@ -1,25 +1,9 @@
 import { Component } from '@angular/core';
-import {
-  AbstractControl,
-  AsyncValidatorFn,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  ValidationErrors,
-  Validators,
-} from '@angular/forms';
-import {
-  Observable,
-  debounceTime,
-  delay,
-  map,
-  switchMap,
-  tap,
-  timer,
-} from 'rxjs';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../auth.service';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { ValidationService } from 'src/app/shared/validation.service';
 
 @Component({
   selector: 'app-register',
@@ -35,7 +19,8 @@ export class RegisterComponent {
     private readonly formBuilder: FormBuilder,
     private readonly authService: AuthService,
     private readonly router: Router,
-    private readonly messageService: MessageService
+    private readonly messageService: MessageService,
+    private readonly validationService: ValidationService
   ) {}
 
   ngOnInit(): void {
@@ -45,12 +30,12 @@ export class RegisterComponent {
       username: [
         '',
         [Validators.required],
-        [this.valueIsRegisteredValidator('username')],
+        [this.validationService.valueIsRegisteredValidator('username')],
       ],
       email: [
         '',
         [Validators.required, Validators.email],
-        [this.valueIsRegisteredValidator('email')],
+        [this.validationService.valueIsRegisteredValidator('email')],
       ],
     });
   }
@@ -61,6 +46,7 @@ export class RegisterComponent {
       this.authService.userRegister(this.registerForm.value).subscribe({
         next: (res) => {
           this.registerForm.reset();
+          this.messageService.clear();
           this.messageService.add({
             severity: 'success',
             closable: false,
@@ -73,6 +59,7 @@ export class RegisterComponent {
         },
         error: (err) => {
           this.registerFormLoading = false;
+          this.messageService.clear();
           this.messageService.add({
             severity: 'error',
             closable: false,
@@ -82,16 +69,5 @@ export class RegisterComponent {
         },
       });
     }
-  }
-
-  private valueIsRegisteredValidator(modelProperty: string): AsyncValidatorFn {
-    return (control: AbstractControl): Observable<ValidationErrors | null> => {
-      return timer(300).pipe(
-        switchMap(() =>
-          this.authService.fieldHasRegister(modelProperty, control.value)
-        ),
-        map((res) => (res.alreadyRegistered ? res : null))
-      );
-    };
   }
 }

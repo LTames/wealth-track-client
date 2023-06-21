@@ -4,6 +4,6 @@
   padding-left: 0.5rem;
 }
 
-.messages .p-message {
+:host ::ng-deep .messages .p-message {
   margin-top: 0;
 }

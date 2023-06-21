@@ -9,10 +9,10 @@
 <div class="px-5 min-h-screen flex justify-content-center align-items-center">
   <div class="border-1 surface-border surface-card border-round py-7 px-4 md:px-7 z-1">
     <div class="mb-4">
-      <div class="text-900 text-xl font-bold mb-2">Login</div>
-      <span class="text-600 font-medium">Por favor insira seus dados</span>
+      <h3 class="text-900 text-xl font-bold mb-2">Login</h3>
+      <p class="text-600 font-medium">Por favor insira seus dados</p>
     </div>
-    <form [formGroup]="loginForm" class="flex flex-column">
+    <form (submit)="submitForm()" [formGroup]="loginForm" class="flex flex-column">
       <span class="p-input-icon-left w-full mb-4">
         <i class="pi pi-user"></i>
         <input formControlName="username" type="text" pInputText class="w-full md:w-25rem" placeholder="Usuário">
@@ -30,7 +30,8 @@
           <a [routerLink]="['/auth/register']" class="font-semibold cursor-pointer text-900 hover:text-primary transition-colors transition-duration-300">Cadastre-se</a>
         </div>
       </div>
-      <p-button [disabled]="loginForm.invalid" label="Entrar" styleClass="w-full"></p-button>
+      <p-button type="submit" [disabled]="!loginForm.valid || loginFormLoading" label="Entrar" styleClass="w-full"></p-button>
+      <p-messages styleClass="messages" [closable]="false"></p-messages>
     </form>
   </div>
 </div>

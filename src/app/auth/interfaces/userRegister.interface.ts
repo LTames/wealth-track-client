@@ -1,6 +1,6 @@
-import { UserLogin } from './userLogin.interface';
-
-export interface UserRegister extends UserLogin {
+export interface UserRegister {
   email: string;
   name: string;
+  username: string;
+  password: string;
 }

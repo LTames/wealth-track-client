@@ -1,1 +1,77 @@
-<p>account works!</p>
+<h2>Minha conta</h2>
+<p>Aqui vocẽ pode realizar as alterações necessárias do seu cadastro</p>
+
+<p-card styleClass="acc-card">
+
+  <form [formGroup]="accountForm">
+    <div class="flex flex-column gap-2 mb-4 pl-2">
+      <label for="name">Nome completo</label>
+      <input formControlName="name" id="name" pInputText type="text">
+    </div>
+
+    <div class="surface-100 mb-3 separation-line"></div>
+
+    <div class="flex flex-column gap-2 mb-4 pl-2">
+      <label for="email">E-mail</label>
+      <input formControlName="email" id="email" pInputText type="email">
+    </div>
+    <div class="validaton-message">
+      <ng-container *ngIf="(accountForm.controls['email'].statusChanges | async) as status">
+        <small *ngIf=" status==='PENDING'">
+          Verificando disponibilidade do e-mail...
+          <i class=" pi pi-spin pi-spinner"></i>
+        </small>
+        <small *ngIf="status === 'VALID'" class="text-green-400">E-mail disponível</small>
+        <small *ngIf="status === 'INVALID' && accountForm.controls['email'].hasError('alreadyRegistered')" class="text-red-400">Já existe uma conta vinculada à este e-mail</small>
+      </ng-container>
+    </div>
+
+    <div class="surface-100 mb-3 separation-line"></div>
+
+
+    <div class="flex flex-column gap-2 mb-4 pl-2">
+      <label for="username">Nome de usuário</label>
+      <input formControlName="username" id="username" pInputText type="text">
+    </div>
+    <div class="validaton-message">
+      <ng-container *ngIf="(accountForm.controls['username'].statusChanges | async) as status">
+        <small *ngIf=" status === 'PENDING'">
+          Verificando disponibilidade do nome de usuário...
+          <i class=" pi pi-spin pi-spinner"></i>
+        </small>
+        <small class="text-green-400" *ngIf="status === 'VALID'">Nome de usuário disponível</small>
+        <small class="text-red-400" *ngIf="status === 'INVALID' && accountForm.controls['username'].hasError('alreadyRegistered')">Já existe uma conta com esse nome de usuário</small>
+      </ng-container>
+    </div>
+
+    <div class="surface-100 mb-3 separation-line"></div>
+
+    <div class="flex gap-3 justify-content-center flex-wrap sm:justify-content-start">
+      <p-button class="flex-order-2 sm:flex-order-1" type=" submit" styleClass="w-full" icon="pi pi-check" label="Salvar alterações"></p-button>
+      <p-button class="flex-order-1 sm:flex-order-2" (onClick)="changePassword()" styleClass="w-full p-button-outlined" icon="pi pi-lock" label="Redefinir senha"></p-button>
+    </div>
+  </form>
+</p-card>
+
+<p-dialog [breakpoints]="{'960px': '292px'}" [style]="{width: '434px'}" styleClass="password-dialog" [resizable]="false" [closable]="false" [draggable]="false" [modal]="true" [(visible)]="passowrdChangeVisible">
+  <ng-template pTemplate="header">
+    <h3 class="text-xl font-bold text-900 mb-2">Alterar senha</h3>
+    <p class="m-0 text-600 font-medium">Digite sua nova senha</p>
+  </ng-template>
+
+  <form [formGroup]="passwordForm">
+    <div class="flex flex-column gap-2 mb-4">
+      <label for="currentPassword">Nova senha</label>
+      <p-password inputStyleClass="w-full" styleClass="w-full password-input" [toggleMask]="true" formControlName="newPassword" id="newPassword" [feedback]="false"></p-password>
+    </div>
+    <div class="flex flex-column gap-2 mb-4">
+      <label for="newPasswordCopy">Confirme a nova senha</label>
+      <p-password inputStyleClass="w-full" styleClass="w-full password-input" [toggleMask]="true" formControlName="newPasswordCopy" id="newPasswordCopy" [feedback]="false"></p-password>
+    </div>
+
+    <div class="flex flex-wrap justify-content-between gap-2">
+      <p-button class="flex-1" styleClass="w-full p-button-outlined" label="Cancelar"></p-button>
+      <p-button class="flex-1" styleClass="w-full" label="Redefinir senha" type="submit"></p-button>
+    </div>
+  </form>
+</p-dialog>

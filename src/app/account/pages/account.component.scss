@@ -1,0 +1,36 @@
+:host ::ng-deep .acc-card {
+  .p-card-body {
+    padding: 1.75rem;
+  }
+
+  .p-card-content {
+    padding: 0;
+  }
+}
+
+.separation-line {
+  height: 0.125rem;
+}
+
+.validaton-message {
+  height: 1rem;
+  margin-bottom: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+:host ::ng-deep .password-dialog {
+  .p-dialog-header {
+    padding: 3rem 3rem 1.25rem 3rem;
+    display: block;
+  }
+
+  .p-dialog-content {
+    padding: 0 3rem 3rem 3rem;
+  }
+}
+
+:host ::ng-deep .password-input {
+  .p-icon-wrapper {
+    right: 1rem;
+  }
+}

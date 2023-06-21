@@ -1,9 +1,9 @@
 import { inject } from '@angular/core';
 import { CanMatchFn, Route, Router, UrlSegment } from '@angular/router';
-import { Observable, catchError, isEmpty, map, of } from 'rxjs';
+import { Observable, catchError, map, of, tap } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 
-export const authGuard: CanMatchFn = (
+export const loggedInAuthGuard: CanMatchFn = (
   route: Route,
   segments: UrlSegment[]
 ): boolean | Observable<boolean> => {
@@ -11,15 +11,16 @@ export const authGuard: CanMatchFn = (
   const router = inject(Router);
   const { userDataValue, token } = auth;
 
-  if (!userDataValue && !token) {
-    router.navigate(['/auth/login']);
+  if (userDataValue && token) {
+    router.navigate(['/dashboard']);
     return false;
   }
 
   if (!userDataValue && token) {
     return auth.getUserData(token).pipe(
-      map((userData) => true),
-      catchError((err, caught) => of(false))
+      tap(() => router.navigate(['/dashboard'])),
+      map((userData) => false),
+      catchError((err, caught) => of(true))
     );
   }
 

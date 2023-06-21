@@ -1,0 +1,12 @@
+<div class="layout-topbar">
+  <a [routerLink]="['/home']">
+    <div>
+      <img class="block max-w-full h-4rem" src="../../../assets/images/logo.png" alt="">
+    </div>
+  </a>
+  <div class="topbar-profile">
+    <p-button styleClass="p-button-rounded p-0" (click)="onProfileButtonClick()">
+      <p-avatar icon="pi pi-user" size="large" shape="circle" styleClass="bg-primary text-white"></p-avatar>
+    </p-button>
+  </div>
+</div>
