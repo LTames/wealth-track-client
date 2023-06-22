@@ -9,6 +9,7 @@ import { ButtonModule } from 'primeng/button';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { PasswordModule } from 'primeng/password';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
   declarations: [AccountComponent],
@@ -20,7 +21,8 @@ import { PasswordModule } from 'primeng/password';
     ButtonModule,
     ReactiveFormsModule,
     DialogModule,
-    PasswordModule
+    PasswordModule,
+    ToastModule,
   ],
 })
 export class AccountModule {}

@@ -37,7 +37,7 @@ export class AuthService {
     return this._token;
   }
 
-  public userLogin(userLogin: UserLogin): Observable<any> {
+  public userLogin(userLogin: UserLogin): Observable<UserData> {
     return this.http
       .post<AuthToken>(`${environment.serverUrl}/auth/login`, userLogin)
       .pipe(
@@ -50,7 +50,7 @@ export class AuthService {
       );
   }
 
-  public userRegister(userRegister: UserRegister): Observable<any> {
+  public userRegister(userRegister: UserRegister): Observable<null> {
     return this.http
       .post<null>(`${environment.serverUrl}/auth/register`, userRegister)
       .pipe(take(1));
@@ -62,7 +62,10 @@ export class AuthService {
     this._userData.next(null);
   }
 
-  public fieldHasRegister(field: string, value: string | number | boolean) {
+  public fieldHasRegister(
+    field: string,
+    value: string | number | boolean
+  ): Observable<FieldRegisteredRes> {
     const params = new HttpParams().set(field, value);
     return this.http
       .get<FieldRegisteredRes>(`${environment.serverUrl}/auth/register`, {
@@ -71,7 +74,7 @@ export class AuthService {
       .pipe(take(1));
   }
 
-  public getUserData(token: string) {
+  public getUserData(token: string): Observable<UserData> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http
       .get<UserData>(`${environment.serverUrl}/user`, { headers })

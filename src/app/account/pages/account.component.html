@@ -3,7 +3,7 @@
 
 <p-card styleClass="acc-card">
 
-  <form [formGroup]="accountForm">
+  <form (submit)="submitAccountForm" [formGroup]="accountForm">
     <div class="flex flex-column gap-2 mb-4 pl-2">
       <label for="name">Nome completo</label>
       <input formControlName="name" id="name" pInputText type="text">
@@ -11,7 +11,7 @@
 
     <div class="surface-100 mb-3 separation-line"></div>
 
-    <div class="flex flex-column gap-2 mb-4 pl-2">
+    <div class="flex flex-column gap-2 mb-2 pl-2">
       <label for="email">E-mail</label>
       <input formControlName="email" id="email" pInputText type="email">
     </div>
@@ -28,8 +28,7 @@
 
     <div class="surface-100 mb-3 separation-line"></div>
 
-
-    <div class="flex flex-column gap-2 mb-4 pl-2">
+    <div class="flex flex-column gap-2 mb-2 pl-2">
       <label for="username">Nome de usuário</label>
       <input formControlName="username" id="username" pInputText type="text">
     </div>
@@ -47,19 +46,20 @@
     <div class="surface-100 mb-3 separation-line"></div>
 
     <div class="flex gap-3 justify-content-center flex-wrap sm:justify-content-start">
-      <p-button class="flex-order-2 sm:flex-order-1" type=" submit" styleClass="w-full" icon="pi pi-check" label="Salvar alterações"></p-button>
+      <p-button [disabled]="!accountForm.valid || accountFormLoading" class="flex-order-2 sm:flex-order-1" type=" submit" styleClass="w-full" icon="pi pi-check" label="Salvar alterações"></p-button>
       <p-button class="flex-order-1 sm:flex-order-2" (onClick)="changePassword()" styleClass="w-full p-button-outlined" icon="pi pi-lock" label="Redefinir senha"></p-button>
     </div>
   </form>
 </p-card>
 
-<p-dialog [breakpoints]="{'960px': '292px'}" [style]="{width: '434px'}" styleClass="password-dialog" [resizable]="false" [closable]="false" [draggable]="false" [modal]="true" [(visible)]="passowrdChangeVisible">
+<!-- PASSWORD CHANGE DIALOG -->
+<p-dialog [breakpoints]="{'960px': '292px'}" [style]="{width: '434px'}" styleClass="password-dialog" [resizable]="false" [closable]="false" [draggable]="false" [modal]="true" [(visible)]="passwordChangeVisible">
   <ng-template pTemplate="header">
     <h3 class="text-xl font-bold text-900 mb-2">Alterar senha</h3>
     <p class="m-0 text-600 font-medium">Digite sua nova senha</p>
   </ng-template>
 
-  <form [formGroup]="passwordForm">
+  <form (submit)="submitPasswordChangeForm()" [formGroup]="passwordChangeForm">
     <div class="flex flex-column gap-2 mb-4">
       <label for="currentPassword">Nova senha</label>
       <p-password inputStyleClass="w-full" styleClass="w-full password-input" [toggleMask]="true" formControlName="newPassword" id="newPassword" [feedback]="false"></p-password>
@@ -70,8 +70,11 @@
     </div>
 
     <div class="flex flex-wrap justify-content-between gap-2">
-      <p-button class="flex-1" styleClass="w-full p-button-outlined" label="Cancelar"></p-button>
-      <p-button class="flex-1" styleClass="w-full" label="Redefinir senha" type="submit"></p-button>
+      <p-button (onClick)="closePasswordDialog()" class="flex-1" styleClass="w-full p-button-outlined" label="Cancelar"></p-button>
+      <p-button [disabled]="!passwordChangeForm.valid || passwordChangeFormLoading" class="flex-1" styleClass="w-full" label="Redefinir senha" type="submit"></p-button>
     </div>
   </form>
 </p-dialog>
+
+<!-- SERVER MESSAGES -->
+<p-toast></p-toast>
