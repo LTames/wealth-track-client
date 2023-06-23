@@ -17,7 +17,7 @@ export const authGuard: CanMatchFn = (
   }
 
   if (!userDataValue && token) {
-    return auth.getUserData(token).pipe(
+    return auth.getUser().pipe(
       map((userData) => true),
       catchError((err, caught) => of(false))
     );

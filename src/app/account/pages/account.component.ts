@@ -4,6 +4,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { ValidationService } from 'src/app/shared/validation.service';
 import { AccountService } from '../account.service';
 import { MessageService } from 'primeng/api';
+import { UserData } from 'src/app/auth/interfaces/userData.interface';
 
 type Severity = 'error' | 'success' | 'warn' | 'info';
 @Component({
@@ -72,21 +73,25 @@ export class AccountComponent implements OnInit {
 
   public submitPasswordChangeForm(): void {
     if (this.passwordChangeForm.valid) {
-      this.accountFormLoading = true;
+      this.passwordChangeFormLoading = true;
       this.accountService
         .updateUserPassword(this.passwordChangeForm.get('newPassword')!.value)
         .subscribe({
           next: (res) => {
-            this.addToastMessage('success', 'Alterações salvas com sucesso');
+            this.addToastMessage(
+              'success',
+              'Sua senha foi alterada com sucesso'
+            );
           },
           error: (err) => {
             this.addToastMessage(
               'error',
-              'Houve um erro ao salvar suas alterações'
+              'Houve um erro ao redefinir sua senha'
             );
           },
           complete: () => {
-            this.accountFormLoading = false;
+            this.passwordChangeFormLoading = false;
+            this.closePasswordDialog();
           },
         });
     }
@@ -94,17 +99,20 @@ export class AccountComponent implements OnInit {
 
   public submitAccountForm(): void {
     if (this.accountForm.valid) {
-      this.passwordChangeFormLoading = true;
-      this.accountService.updateUserData(this.accountForm.value).subscribe({
-        next: (res) => {
-          this.addToastMessage('success', 'Sua senha foi alterada com sucesso');
+      this.accountFormLoading = true;
+      this.accountService.updateUser(this.accountForm.value).subscribe({
+        next: (userData) => {
+          this.authService.setUserData(userData);
+          this.addToastMessage('success', 'Alterações salvas com sucesso');
         },
         error: (err) => {
-          this.addToastMessage('error', 'Houve um erro ao redefinir sua senha');
+          this.addToastMessage(
+            'error',
+            'Houve um erro ao salvar suas alterações'
+          );
         },
         complete: () => {
-          this.passwordChangeFormLoading = false;
-          this.closePasswordDialog();
+          this.accountFormLoading = false;
         },
       });
     }

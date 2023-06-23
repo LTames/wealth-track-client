@@ -1,31 +1,25 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { UserData } from '../auth/interfaces/userData.interface';
 import { Observable, take } from 'rxjs';
-import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AccountService {
-  constructor(
-    private readonly http: HttpClient,
-    private readonly authService: AuthService
-  ) {}
+  constructor(private readonly http: HttpClient) {}
 
-  updateUserData(userData: UserData): Observable<UserData> {
-    const { id, ...result } = userData;
+  updateUser(updateUser: any): Observable<UserData> {
     return this.http
-      .post<UserData>(`${environment.serverUrl}/user/${id}`, result)
+      .put<UserData>(`${environment.serverUrl}/user`, updateUser)
       .pipe(take(1));
   }
 
-  updateUserPassword(newUserPassword: string): Observable<null> {
-    const { id } = this.authService.userDataValue!;
+  updateUserPassword(newPassword: string): Observable<null> {
     return this.http
-      .post<null>(`${environment.serverUrl}/user/${id}/password`, {
-        newUserPassword,
+      .patch<null>(`${environment.serverUrl}/user/password`, {
+        newPassword: newPassword,
       })
       .pipe(take(1));
   }

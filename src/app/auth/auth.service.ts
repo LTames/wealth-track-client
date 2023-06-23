@@ -46,7 +46,7 @@ export class AuthService {
           if (userLogin.rememberMe) localStorage.setItem('token', accessToken);
           this._token = accessToken;
         }),
-        switchMap(({ accessToken }) => this.getUserData(accessToken))
+        switchMap(({ accessToken }) => this.getUser())
       );
   }
 
@@ -74,15 +74,16 @@ export class AuthService {
       .pipe(take(1));
   }
 
-  public getUserData(token: string): Observable<UserData> {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http
-      .get<UserData>(`${environment.serverUrl}/user`, { headers })
-      .pipe(
-        take(1),
-        tap((userData) => {
-          this._userData.next(userData);
-        })
-      );
+  public getUser(): Observable<UserData> {
+    return this.http.get<UserData>(`${environment.serverUrl}/user`).pipe(
+      take(1),
+      tap((userData) => {
+        this._userData.next(userData);
+      })
+    );
+  }
+
+  public setUserData(data: UserData) {
+    this._userData.next(data);
   }
 }

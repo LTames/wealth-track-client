@@ -17,7 +17,7 @@ export const loggedInAuthGuard: CanMatchFn = (
   }
 
   if (!userDataValue && token) {
-    return auth.getUserData(token).pipe(
+    return auth.getUser().pipe(
       tap(() => router.navigate(['/dashboard'])),
       map((userData) => false),
       catchError((err, caught) => of(true))

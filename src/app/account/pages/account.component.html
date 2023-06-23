@@ -3,7 +3,7 @@
 
 <p-card styleClass="acc-card">
 
-  <form (submit)="submitAccountForm" [formGroup]="accountForm">
+  <form (submit)="submitAccountForm()" [formGroup]="accountForm">
     <div class="flex flex-column gap-2 mb-4 pl-2">
       <label for="name">Nome completo</label>
       <input formControlName="name" id="name" pInputText type="text">
@@ -46,7 +46,7 @@
     <div class="surface-100 mb-3 separation-line"></div>
 
     <div class="flex gap-3 justify-content-center flex-wrap sm:justify-content-start">
-      <p-button [disabled]="!accountForm.valid || accountFormLoading" class="flex-order-2 sm:flex-order-1" type=" submit" styleClass="w-full" icon="pi pi-check" label="Salvar alterações"></p-button>
+      <p-button [disabled]="!accountForm.valid || accountForm.pristine || accountFormLoading " class="flex-order-2 sm:flex-order-1" type="submit" styleClass="w-full" icon="pi pi-check" label="Salvar alterações"></p-button>
       <p-button class="flex-order-1 sm:flex-order-2" (onClick)="changePassword()" styleClass="w-full p-button-outlined" icon="pi pi-lock" label="Redefinir senha"></p-button>
     </div>
   </form>
