@@ -1,0 +1,35 @@
+<div class="select-none col-12 md:col-6 xl:col-4">
+  <div class="card h-full">
+    <h3 class="font-semibold text-3xl">Entradas</h3>
+    <div class="flex justify-content-between align-items-start mt-2">
+      <span class="block w-6 text-4xl font-bold text-900">{{ stats.income | currency:'BRL' }}</span>
+      <div class="w-4">
+        <img class="pointer-events-none w-full" src="../../../assets/images/entradas.svg" alt="">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="select-none col-12 md:col-6 xl:col-4">
+  <div class="card h-full">
+    <h3 class="font-semibold text-3xl">Saídas</h3>
+    <div class="flex justify-content-between align-items-start mt-2">
+      <span class="block w-6 text-4xl font-bold text-900">{{ stats.expenses | currency:'BRL' }}</span>
+      <div class="w-4">
+        <img class="pointer-events-none w-full" src="../../../assets/images/saidas.svg" alt="">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="select-none col-12 xl:col-4">
+  <div class="card h-full">
+    <h3 class="font-semibold text-3xl">Saldo</h3>
+    <div class="flex justify-content-between align-items-start mt-2">
+      <span class="block w-6 text-4xl font-bold text-900">{{ stats.balance | currency:'BRL' }}</span>
+      <div class="w-4">
+        <img class="pointer-events-none w-full" src="../../../assets/images/saldo.svg" alt="">
+      </div>
+    </div>
+  </div>
+</div>

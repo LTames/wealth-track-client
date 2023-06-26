@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../auth.service';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { MessageHelper } from 'src/app/shared/helper/messageHelper';
 
 @Component({
   selector: 'app-login',
@@ -41,12 +42,9 @@ export class LoginComponent implements OnInit {
         this.loginFormLoading = false;
         this.loginForm.get('password')?.reset();
         this.messageService.clear();
-        this.messageService.add({
-          summary: 'Usuário ou senha incorretos',
-          severity: 'error',
-          closable: false,
-          life: 3000,
-        });
+        this.messageService.add(
+          MessageHelper.createMessage('Usuário ou senha incorretos', 'error')
+        );
       },
     });
   }

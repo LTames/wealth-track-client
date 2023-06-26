@@ -5,8 +5,8 @@ import { ValidationService } from 'src/app/shared/validation.service';
 import { AccountService } from '../account.service';
 import { MessageService } from 'primeng/api';
 import { UserData } from 'src/app/auth/interfaces/userData.interface';
+import { MessageHelper } from 'src/app/shared/helper/messageHelper';
 
-type Severity = 'error' | 'success' | 'warn' | 'info';
 @Component({
   selector: 'app-account',
   templateUrl: './account.component.html',
@@ -78,15 +78,19 @@ export class AccountComponent implements OnInit {
         .updateUserPassword(this.passwordChangeForm.get('newPassword')!.value)
         .subscribe({
           next: (res) => {
-            this.addToastMessage(
-              'success',
-              'Sua senha foi alterada com sucesso'
+            this.messageService.add(
+              MessageHelper.createMessage(
+                'Sua senha foi alterada com sucesso',
+                'success'
+              )
             );
           },
           error: (err) => {
-            this.addToastMessage(
-              'error',
-              'Houve um erro ao redefinir sua senha'
+            this.messageService.add(
+              MessageHelper.createMessage(
+                'Houve um erro ao redefinir sua senha',
+                'error'
+              )
             );
           },
           complete: () => {
@@ -103,12 +107,19 @@ export class AccountComponent implements OnInit {
       this.accountService.updateUser(this.accountForm.value).subscribe({
         next: (userData) => {
           this.authService.setUserData(userData);
-          this.addToastMessage('success', 'Alterações salvas com sucesso');
+          this.messageService.add(
+            MessageHelper.createMessage(
+              'Alterações salvas com sucesso',
+              'success'
+            )
+          );
         },
         error: (err) => {
-          this.addToastMessage(
-            'error',
-            'Houve um erro ao salvar suas alterações'
+          this.messageService.add(
+            MessageHelper.createMessage(
+              'Houve um erro ao salvar suas alterações',
+              'error'
+            )
           );
         },
         complete: () => {
@@ -121,14 +132,5 @@ export class AccountComponent implements OnInit {
   public closePasswordDialog(): void {
     this.passwordChangeVisible = false;
     this.passwordChangeForm.reset();
-  }
-
-  private addToastMessage(severity: Severity, summary: string): void {
-    this.messageService.add({
-      closable: false,
-      severity,
-      summary,
-      life: 3000,
-    });
   }
 }

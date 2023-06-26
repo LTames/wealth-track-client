@@ -4,6 +4,7 @@ import { AuthService } from '../../auth.service';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ValidationService } from 'src/app/shared/validation.service';
+import { MessageHelper } from 'src/app/shared/helper/messageHelper';
 
 @Component({
   selector: 'app-register',
@@ -47,12 +48,12 @@ export class RegisterComponent {
         next: (res) => {
           this.registerForm.reset();
           this.messageService.clear();
-          this.messageService.add({
-            severity: 'success',
-            closable: false,
-            life: 3000,
-            summary: 'Cadastro realizado com sucesso',
-          });
+          this.messageService.add(
+            MessageHelper.createMessage(
+              'Cadastro realizado com sucesso',
+              'success'
+            )
+          );
           setTimeout(() => {
             this.router.navigate(['/auth/login']);
           }, 3500);
@@ -60,12 +61,12 @@ export class RegisterComponent {
         error: (err) => {
           this.registerFormLoading = false;
           this.messageService.clear();
-          this.messageService.add({
-            severity: 'error',
-            closable: false,
-            life: 3000,
-            summary: 'Houve um erro ao realizar seu cadastro',
-          });
+          this.messageService.add(
+            MessageHelper.createMessage(
+              'Houve um erro ao realizar seu cadastro',
+              'error'
+            )
+          );
         },
       });
     }

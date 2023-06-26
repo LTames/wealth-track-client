@@ -1,5 +1,5 @@
 <div class="grid">
-  <div class="pointer-events-none col-12">
+  <div class="col-12">
     <div class="flex flex-column sm:flex-row align-items-center gap-4">
       <div class="flex flex-column sm:flex-row align-items-center gap-3">
         <div class="flex flex-column align-items-center sm:align-items-start">
@@ -9,41 +9,115 @@
     </div>
   </div>
 
-  <div class="col-12 md:col-6 xl:col-4">
-    <div class="card h-full">
-      <h3 class="font-semibold text-3xl">Entradas</h3>
-      <div class="flex justify-content-between align-items-start mt-2">
-        <span class="block w-6 text-4xl font-bold text-900">R$ {{ 120 }}</span>
-        <div class="w-4">
-          <img class="w-full" src="../../../assets/images/entradas.svg" alt="">
-        </div>
-      </div>
+  <dashboard-stats class="grid flex-auto col-12" [stats]="calculateStats()"></dashboard-stats>
+
+  <div class="col-12">
+    <div class="card px-6 py-6">
+      <p-toast></p-toast>
+
+      <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+          <div class="flex gap-2 flex-wrap flex-column flex-1 sm:flex-row my-2">
+            <p-button label="Adicionar registro" icon="pi pi-plus" styleClass="w-full p-button-success mr-2" (onClick)="createTransaction()"></p-button>
+            <p-button label="Deletar seleção" icon="pi pi-trash" styleClass="w-full p-button-danger" (onClick)="deleteSelectedTransactions()" [disabled]="!selectedTransactions.length"></p-button>
+          </div>
+        </ng-template>
+      </p-toolbar>
+
+      <p-table [value]="transactions" [(selection)]="selectedTransactions" responsiveLayout="stack" selectionMode="multiple" [rowHover]="true" dataKey="id">
+        <ng-template pTemplate="caption">
+          <h5 class="m-0">Lista de registros</h5>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="w-3rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+            <th pSortableColumn="category">Categoria <p-sortIcon field="category"></p-sortIcon></th>
+            <th pSortableColumn="value">Valor <p-sortIcon field="value"></p-sortIcon></th>
+            <th pSortableColumn="transactionType">Tipo <p-sortIcon field="transactionType"></p-sortIcon></th>
+            <th pSortableColumn="createdAt">Data <p-sortIcon field="createdAt"></p-sortIcon></th>
+            <th></th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-transaction>
+          <tr>
+            <td>
+              <p-tableCheckbox [value]="transaction"></p-tableCheckbox>
+            </td>
+            <td class="w-2 min-w-10rem">
+              <span class="p-column-title">Id</span>
+              <span>{{ transaction.id }}</span>
+            </td>
+
+            <td class="w-2 min-w-10rem">
+              <span class="p-column-title">Categoria</span>
+              <span>{{ transaction.category }}</span>
+            </td>
+
+            <td class="w-2 min-w-10rem">
+              <span class="p-column-title">Valor</span>
+              <span>{{ transaction.value | currency:'BRL' }}</span>
+            </td>
+
+            <td class="w-2 min-w-10rem">
+              <span class="p-column-title">Tipo</span>
+              <span [ngClass]="applyTransactionTypeCSS(transaction.transactionType)" class="border-round px-2 py-1 uppercase font-bold text-sm">{{ transaction.transactionType }}</span>
+            </td>
+
+            <td class="w-2 min-w-10rem">
+              <span class="p-column-title">Data</span>
+              <span>{{ transaction.createdAt.toLocaleDateString('pt-BR') }}</span>
+            </td>
+
+            <td>
+              <div class="flex gap-2 justify-content-center">
+                <p-button class="action-btn" icon="pi pi-pencil" styleClass="w-full p-button-help" (onClick)="editTransaction(transaction)"></p-button>
+                <p-button class="action-btn" icon="pi pi-trash" styleClass="w-full p-button-danger" (onClick)="deleteTransaction(transaction)"></p-button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
     </div>
+
+    <p-dialog [closable]="false" [draggable]="false" [(visible)]="transactionFormDialog" [style]="{width: '450px'}" header="Detalhes da transação" [modal]="true" class="p-fluid">
+      <ng-template pTemplate="content">
+        <form [formGroup]="transactionForm">
+          <div class="field">
+            <label for="value">Valor</label>
+            <p-inputNumber [allowEmpty]="false" [showClear]="true" id="value" focu formControlName="value" mode="currency" currency="BRL" locale="pt-BR"></p-inputNumber>
+          </div>
+
+          <div class="field">
+            <label for="transactionType">Tipo</label>
+            <p-dropdown formControlName="transactionType" inputId="transactionType" [options]="transactionTypes" optionValue="value" optionLabel="label" placeholder="Selecione">
+              <ng-template pTemplate="selectedItem">
+                <span *ngIf="transactionForm.get('transactionType')?.value as transactionType" class="border-round px-2 py-1 uppercase font-bold text-sm" [ngClass]="applyTransactionTypeCSS(transactionType)">{{ transactionType }}</span>
+              </ng-template>
+
+              <ng-template let-option pTemplate="item">
+                <span class="border-round px-2 py-1 uppercase font-bold text-sm" [ngClass]="applyTransactionTypeCSS(option.value)">{{ option.label }}</span>
+              </ng-template>
+            </p-dropdown>
+          </div>
+
+          <div class="field">
+            <label for="category">Categoria</label>
+            <input pInputText id="category" formControlName="category" />
+          </div>
+        </form>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <p-button label="Cancelar" icon="pi pi-times" styleClass="p-button-outlined" (onClick)="closeTransactionFormDialog()"></p-button>
+        <p-button [disabled]="!transactionForm.valid" label="Salvar" icon="pi pi-check" (onClick)="saveTransaction()"></p-button>
+      </ng-template>
+    </p-dialog>
+
+    <p-confirmDialog [closable]="false" [focusTrap]="true" [style]="{width: '450px'}"></p-confirmDialog>
   </div>
-
-  <div class="col-12 md:col-6 xl:col-4">
-    <div class="card h-full">
-      <h3 class="font-semibold text-3xl">Saídas</h3>
-      <div class="flex justify-content-between align-items-start mt-2">
-        <span class="block w-6 text-4xl font-bold text-900">R$ {{ 120 }}</span>
-        <div class="w-4">
-          <img class="w-full" src="../../../assets/images/saidas.svg" alt="">
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-12 md:col-6 xl:col-4">
-    <div class="card h-full">
-      <h3 class="font-semibold text-3xl">Saldo</h3>
-      <div class="flex justify-content-between align-items-start mt-2">
-        <span class="block w-6 text-4xl font-bold text-900">R$ {{ 120 }}</span>
-        <div class="w-4">
-          <img class="w-full" src="../../../assets/images/saldo.svg" alt="">
-        </div>
-      </div>
-    </div>
-  </div>
-
-
 </div>
