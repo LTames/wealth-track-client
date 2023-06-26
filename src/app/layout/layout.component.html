@@ -1,8 +1,10 @@
-<div class="layout-content-wrapper">
-  <app-topbar></app-topbar>
-  <div class="layout-content">
-    <router-outlet></router-outlet>
+<div class="min-h-screen">
+  <div class="p-5">
+    <app-topbar></app-topbar>
+    <div class="layout-content">
+      <router-outlet></router-outlet>
+    </div>
   </div>
+  <app-profilesidebar></app-profilesidebar>
+  <div class="layout-mask"></div>
 </div>
-<app-profilesidebar></app-profilesidebar>
-<div class="layout-mask"></div>
