@@ -203,7 +203,6 @@ export class DashboardComponent implements OnInit {
                 this.selectedTransactions = [];
               },
               error: (err) => {
-                console.log(err);
                 this.messageService.add(
                   MessageHelper.createMessage(
                     'Houve um erro ao deletar as transações selecionadas',

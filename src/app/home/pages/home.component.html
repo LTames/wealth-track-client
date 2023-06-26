@@ -1,4 +1,28 @@
-<div class="flex justify-content-between px-8 py-3 align-items-center">
-  <h1>Essa e a home</h1>
-  <a [routerLink]="['/dashboard']">Acessar dashboard</a>
+<div class="relative overflow-hidden flex flex-column justify-content-center">
+  <div class="bg-circle opacity-50" style="top: -200px; left: -700px;"></div>
+  <div class="bg-circle hidden lg:flex" style="top: 50px; right:-800px; transform: rotate(60deg)"></div>
+  <div class="landing-wrapper">
+    <div class="flex align-items-center justify-content-between relative lg:static py-6 px-4 mx-0 md:px-7 lg:px-8 lg:py-6 lg:mx-8">
+      <a class="select-none" [routerLink]="['/home']">
+        <div>
+          <img class="pointer-events-none select-none block max-w-full h-4rem" src="../../../assets/images/logo.png" alt="">
+        </div>
+      </a>
+
+      <a [routerLink]="['/dashboard']" class="text-sm sm:text-base p-button-outlined" label="Acessar dashboard" pButton></a>
+    </div>
+
+    <div class="py-4 px-4 mx-0 md:mx-6 lg:mx-8 lg:px-8 z-2">
+      <div id="home" class="grid grid-nogutter justify-content-between align-items-center mb-6 py-6 md:mb-8 md:py-8">
+        <div class="col-12 md:col-4 flex flex-column gap-4 flex-order-1 md:flex-order-0 align-items-center md:align-items-start text-center md:text-left">
+          <span class="block text-900 font-bold text-4xl">Registre suas despesas sem esforço</span>
+          <span class="block text-700 text-lg"><span class="font-bold">WealthTrack</span> | A combinação perfeita entre simplicidade moderna e controle financeiro.</span>
+        </div>
+
+        <div class="col-12 md:col-7 flex-order-0 md:flex-order-1 mb-6 md:mb-0 border-round">
+          <img src="../../../assets/images/app-image.png" class="fadeinright w-full h-full border-round shadow-2 animation-duration-1000 animation-ease-out">
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
